@@ -1,0 +1,3 @@
+[submodule "manager-taxi"]
+	path = manager-taxi
+	url = ./manager-taxi
