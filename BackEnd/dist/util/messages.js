@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELETED = exports.ERROR_UPLOAD_FILE = exports.ERROR_DELETE_FILE = exports.ERROR_EXISTS = exports.ERROR_UNAUTHORIZED = exports.ERROR_INVALID_CREDENTIALS = exports.ERROR_LOGIN = exports.ERROR_SIGNUP = exports.ERROR_DELETE = exports.ERROR_INTERNAL_SERVER = exports.ERROR_UNKNOWN_ERROR = exports.ERROR_UNDEFINED_ROUTE = exports.ERROR_DEFAULT_MESSAGE = exports.ERROR_EMAIL_EXIST = exports.ERROR_INVALID_INPUTS = exports.ERROR_INVALID_DATA = void 0;
+exports.ERROR_INVALID_DATA = "לא נמצא פריט למידע הנדרש!";
+exports.ERROR_INVALID_INPUTS = "שדות לא תקינים, בדוק תקינות הנתונים!";
+exports.ERROR_EMAIL_EXIST = "אימייל זה רשום כבר!";
+exports.ERROR_DEFAULT_MESSAGE = "משהו השתבש!";
+exports.ERROR_UNDEFINED_ROUTE = "כתובת לא נמצאה!";
+exports.ERROR_UNKNOWN_ERROR = "תקלה לא ידועה!";
+exports.ERROR_INTERNAL_SERVER = "משהו השתבש!";
+exports.ERROR_DELETE = "משהו השתבש, לא נמחק!";
+exports.ERROR_SIGNUP = "בעיה בהרשמה, נסה שוב מאוחר יותר!";
+exports.ERROR_LOGIN = "בעיה בכניסה נסה שוב מאוחר יותר!";
+exports.ERROR_INVALID_CREDENTIALS = "נתונים לא תקינים!";
+exports.ERROR_UNAUTHORIZED = "איך לך הרשאה!";
+exports.ERROR_EXISTS = "שדה כבר קיים!";
+exports.ERROR_DELETE_FILE = "הקובץ לא נמחק!";
+exports.ERROR_UPLOAD_FILE = "שגיאה בהעלאת הקובץ!";
+/****************************************************************/
+exports.DELETED = "נמחק בהצלחה";
