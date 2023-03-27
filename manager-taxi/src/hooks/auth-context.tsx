@@ -18,17 +18,18 @@ export const AuthContextProvider = ({
   children: JSX.Element;
 }) => {
   const [user, setUser] = useState<userWToken | undefined>(undefined);
-  const [tokenExpirationDate, setTokenExpirationDate] = useState<Date | null>();
+  const [accessExpirationDate, setAccessExpirationDate] = useState<Date | null>();
+  // const [tokenExpirationDate, setTokenExpirationDate] = useState<Date | null>();
 
   const login = useCallback(async (user: userWToken) => {
     await AsyncStorage.setItem("userData", JSON.stringify(user));
-    const EXPIRATION_TIME = 1000 * 60 * 60 * 12;
-    const tokenExpirationDate = user.token
+    const EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    const accessExpirationDate = user.token
       ? new Date(user.token)
       : new Date(new Date().getTime() + EXPIRATION_TIME);
-    user.tokenExpiration = tokenExpirationDate;
+    user.tokenExpiration = accessExpirationDate;
     setUser(user);
-    setTokenExpirationDate(tokenExpirationDate);
+    setAccessExpirationDate(accessExpirationDate);
     AsyncStorage.setItem(
       "userData",
       JSON.stringify({
@@ -36,7 +37,7 @@ export const AuthContextProvider = ({
         token: user.token,
         image: user.image,
         role: user.role,
-        tokenExpiration: tokenExpirationDate.toISOString(),
+        tokenExpiration: accessExpirationDate.toISOString(),
       })
     );
   }, []);
@@ -48,12 +49,13 @@ export const AuthContextProvider = ({
   const logout = useCallback(async () => {
     await AsyncStorage.removeItem("userData");
     setUser(undefined);
-    setTokenExpirationDate(null);
+    setAccessExpirationDate(null);
   }, []);
 
   const updateToken = useCallback(async () => {
     //call refresh token
-    const EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
+    // const EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
+
     const newTokens = await getAccessUsingRefresh();
     const currUser = {
       ...user,
@@ -64,8 +66,8 @@ export const AuthContextProvider = ({
   }, [login]);
 
   useEffect(() => {
-    if (user && user.token && tokenExpirationDate) {
-      let remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+    if (user && user.token && accessExpirationDate) {
+      let remainingTime = accessExpirationDate.getTime() - new Date().getTime();
       if (remainingTime < 0) {
         remainingTime = 0;
       }
@@ -73,7 +75,7 @@ export const AuthContextProvider = ({
     } else {
       clearTimeout(logoutTimer);
     }
-  }, [user, logout, tokenExpirationDate]);
+  }, [user, logout, accessExpirationDate]);
 
   useEffect(() => {
     (async () => {
