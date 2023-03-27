@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import LandingPage from "../LandingPage";
 import { AuthenticatedStack, AuthStack } from "./NavStacks";
 import i18n from "../../../util/i18n";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Loading } from "../Loading";
 
 function Navigation({ user }: { user: userWToken | undefined }) {
   return (
@@ -32,7 +32,7 @@ export function Root() {
   }, []);
 
   if (isLoading) {
-    <LandingPage />;
+    <Loading />;
   }
   return <Navigation user={user} />;
 }

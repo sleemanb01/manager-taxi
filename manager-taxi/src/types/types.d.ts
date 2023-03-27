@@ -8,13 +8,10 @@ export type AuthCtx = {
   logout: () => void;
 };
 
-export type userWToken = {
-  id: string;
-  name: string;
-  phone: string;
-  image?: string;
+export type userWToken = IUser & {
   token: string;
-  role: IRole["_id"];
+  refreshToken: string;
+  tokenExpiration: Date;
 };
 
 export type reducerInputState = {

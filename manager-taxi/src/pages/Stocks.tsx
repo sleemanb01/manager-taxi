@@ -2,10 +2,11 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { View, StyleSheet } from "react-native";
 import { Appbar } from "react-native-paper";
+import { useStocks } from "../hooks/useStocks";
 import { getCurrDay } from "../util/time";
 
 export default function Stocks() {
-  // const { categories } = stocksWActions;
+  const { categories } = useStocks();
 
   // const nav = useNavigate();
   // const { shift, setShift } = useContext(ShiftContext);

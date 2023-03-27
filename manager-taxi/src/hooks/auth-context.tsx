@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { AuthCtx, userWToken } from "../types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAccessUsingRefresh } from "../util/refreshToken";
 
 export const AuthContext = createContext<AuthCtx>({
   user: undefined,
@@ -22,8 +23,8 @@ export const AuthContextProvider = ({
   const login = useCallback(async (user: userWToken) => {
     await AsyncStorage.setItem("userData", JSON.stringify(user));
     const EXPIRATION_TIME = 1000 * 60 * 60 * 12;
-    const tokenExpirationDate = user.tokenExpiration
-      ? new Date(user.tokenExpiration)
+    const tokenExpirationDate = user.token
+      ? new Date(user.token)
       : new Date(new Date().getTime() + EXPIRATION_TIME);
     user.tokenExpiration = tokenExpirationDate;
     setUser(user);
@@ -31,10 +32,10 @@ export const AuthContextProvider = ({
     AsyncStorage.setItem(
       "userData",
       JSON.stringify({
-        id: user.id,
+        id: user._id,
         token: user.token,
-        name: user.name,
-        email: user.email,
+        image: user.image,
+        role: user.role,
         tokenExpiration: tokenExpirationDate.toISOString(),
       })
     );
@@ -49,6 +50,18 @@ export const AuthContextProvider = ({
     setUser(undefined);
     setTokenExpirationDate(null);
   }, []);
+
+  const updateToken = useCallback(async () => {
+    //call refresh token
+    const EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
+    const newTokens = await getAccessUsingRefresh();
+    const currUser = {
+      ...user,
+      token: newTokens.accessToken,
+      refreshToken: newTokens.refreshToken,
+    };
+    login(currUser);
+  }, [login]);
 
   useEffect(() => {
     if (user && user.token && tokenExpirationDate) {
@@ -67,13 +80,16 @@ export const AuthContextProvider = ({
       const storedData = await AsyncStorage.getItem("userData");
       if (storedData) {
         const data = JSON.parse(storedData);
-        if (data && data.token && new Date(data.expiration) > new Date()) {
+        if (data && data.token && new Date(data.tokenExpiration) > new Date()) {
           const user = {
             id: data.id,
-            email: data.email,
+            phone: data.phone,
             name: data.name,
+            image: data.image,
+            role: data.role,
             token: data.token,
-            tokenExpiration: new Date(data.expiration),
+            refreshToken: data.refreshToken,
+            tokenExpiration: new Date(data.tokenExpiration),
           };
           login(user);
         }

@@ -7,7 +7,7 @@ export const MAX_MEAT = 150;
 /* ************************************************************** */
 
 // export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-export const BACKEND_URL = "http://10.0.0.25:5000/";
+export const BACKEND_URL = "http://10.0.0.12:5000/";
 export const BACKEND_API_URL = BACKEND_URL + "api/";
 export const DEFAULT_HEADERS = { "Content-Type": "application/json" };
 
@@ -23,3 +23,4 @@ export const ENDPOINT_STOCKS_PARTIAL = "stocks/partial";
 export const ENDPOINT_STOCKS_WIMAGE = "stocks/WImage";
 export const ENDPOINT_CATEGORIES = "categories";
 export const ENDPOINT_SHIFTS = "shifts";
+export const ENDPOINT_ROLES = "roles";
