@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { AuthCtx, userWToken } from "../types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getAccessUsingRefresh } from "../util/refreshToken";
+import { getAccessUsingRefresh, gettokenRemainingTime } from "../util/tokens";
 
 export const AuthContext = createContext<AuthCtx>({
   user: undefined,
@@ -18,19 +18,16 @@ export const AuthContextProvider = ({
   children: JSX.Element;
 }) => {
   const [user, setUser] = useState<userWToken | undefined>(undefined);
-  const [tokenExpirationDate, setTokenExpirationDate] = useState<Date | null>();
 
   const login = useCallback(async (user: userWToken) => {
     await AsyncStorage.setItem("userData", JSON.stringify(user));
     setUser(user);
-    setTokenExpirationDate(tokenExpirationDate);
     AsyncStorage.setItem(
       "userData",
       JSON.stringify({
-        id: user._id,
-        name: user.name,
-        phone: user.phone,
+        _id: user._id,
         image: user.image,
+        phone: user.phone,
         role: user.role,
         accessToken: user.accessToken,
         refreshToken: user.refreshToken,
@@ -45,47 +42,53 @@ export const AuthContextProvider = ({
   const logout = useCallback(async () => {
     await AsyncStorage.removeItem("userData");
     setUser(undefined);
-    setTokenExpirationDate(null);
   }, []);
 
   const updateToken = useCallback(async () => {
-    //call refresh token
-    const newTokens = await getAccessUsingRefresh();
-    const currUser = {
-      ...user,
-      token: newTokens.accessToken,
-      refreshToken: newTokens.refreshToken,
-    };
-    login(currUser);
-  }, [login]);
+    if (gettokenRemainingTime(user!.refreshToken) > 0) {
+      const newTokens = await getAccessUsingRefresh(user!.refreshToken);
+      if (newTokens) {
+        const currUser: userWToken = {
+          ...user!,
+          accessToken: newTokens.accessToken,
+          refreshToken: newTokens.refreshToken,
+        };
+        login(currUser);
+      }
+    } else {
+      logout();
+    }
+  }, [login, logout]);
 
   useEffect(() => {
     if (user && user.accessToken) {
-      let remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
-      if (remainingTime < 0) {
-        remainingTime = 0;
-      }
-      logoutTimer = setTimeout(logout, remainingTime);
+      logoutTimer = setTimeout(
+        updateToken,
+        gettokenRemainingTime(user.accessToken)
+      );
     } else {
       clearTimeout(logoutTimer);
     }
-  }, [user, logout, tokenExpirationDate]);
+  }, [user, logout]);
 
   useEffect(() => {
     (async () => {
       const storedData = await AsyncStorage.getItem("userData");
       if (storedData) {
         const data = JSON.parse(storedData);
-        if (data && data.token && new Date(data.tokenExpiration) > new Date()) {
-          const user = {
-            id: data.id,
-            phone: data.phone,
+        if (
+          data &&
+          data.accessToken &&
+          new Date(data.accessToken) > new Date()
+        ) {
+          const user: userWToken = {
+            _id: data._id,
             name: data.name,
+            phone: data.phone,
             image: data.image,
             role: data.role,
-            token: data.token,
+            accessToken: data.accessToken,
             refreshToken: data.refreshToken,
-            tokenExpiration: new Date(data.tokenExpiration),
           };
           login(user);
         }

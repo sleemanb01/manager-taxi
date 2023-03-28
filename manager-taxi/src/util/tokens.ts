@@ -17,6 +17,6 @@ export const getAccessUsingRefresh = async (
   }
 };
 
-export const getTokenRemainingTime = (token: string) => {
+export const gettokenRemainingTime = (token: string) => {
   const remaining = jwtDecode(token);
 };
