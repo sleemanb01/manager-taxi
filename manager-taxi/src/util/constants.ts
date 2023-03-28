@@ -15,6 +15,7 @@ export const DEFAULT_HEADERS = { "Content-Type": "application/json" };
 
 export const ENDPOINT_SIGNUP = "users/signup";
 export const ENDPOINT_LOGIN = "users/login";
+export const ENDPOINT_REFRESH_TOKENS = "users/refreshTokens";
 export const ENDPOINT_GETUSERS = "users";
 export const ENDPOINT_ASSIGNMENTS = "assignments";
 export const ENDPOINT_STOCKS = "stocks";

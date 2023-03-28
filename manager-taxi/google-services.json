@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "148954935000",
+    "project_id": "manager-taxi",
+    "storage_bucket": "manager-taxi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148954935000:android:a9c8c4af7dcee2140871ad",
+        "android_client_info": {
+          "package_name": "com.sleemanb01.managertaxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148954935000-3svhloc5a2grv08sieff5vgto5rnuj05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARFbzLCoJ7QfA5KgjC8BD84ZJvUQZbsKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148954935000-3svhloc5a2grv08sieff5vgto5rnuj05.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "148954935000-ngskdm4a71qbndn28iscgai65o0vl06p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sleemanb01.managertaxi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

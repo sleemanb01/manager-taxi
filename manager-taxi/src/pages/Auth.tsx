@@ -11,7 +11,7 @@ import { DEFAULT_HEADERS, ENDPOINT_LOGIN } from "../util/constants";
 export default function Auth() {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  const { login } = React.useContext(AuthContext);
+  const { login, logout } = React.useContext(AuthContext);
   // const [formState, inputHandler, setFormData] = useForm(
   //   {
   //     code: reducerInputStateInitVal,
