@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 import { useHttpClient } from "../hooks/http-hook";
 import { Keys } from "../types/types";
 import { ENDPOINT_REFRESH_TOKENS } from "./constants";
@@ -18,5 +18,11 @@ export const getAccessUsingRefresh = async (
 };
 
 export const gettokenRemainingTime = (token: string) => {
-  const remaining = jwtDecode(token);
+  const exp = jwtDecode<JwtPayload>(token).exp;
+
+  let remaining = new Date(exp! * 1000).getTime() - new Date().getTime();
+  if (remaining < 0) {
+    remaining = 0;
+  }
+  return remaining;
 };

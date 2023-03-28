@@ -60,7 +60,7 @@ export default function Stocks() {
     <View style={styles.container}>
       <Appbar.Header elevated={true} mode={"small"}>
         <Appbar.Content title={t("Stocks")} />
-        <Appbar.Content title={getCurrDay().slice(5, -6)} />
+        <Appbar.Content title={getCurrDay().slice(5, -6)} onPress={() => {}} />
         <Appbar.Action icon="magnify" onPress={() => {}} />
       </Appbar.Header>
     </View>
