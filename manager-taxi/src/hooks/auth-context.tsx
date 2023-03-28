@@ -22,21 +22,18 @@ export const AuthContextProvider = ({
 
   const login = useCallback(async (user: userWToken) => {
     await AsyncStorage.setItem("userData", JSON.stringify(user));
-    const EXPIRATION_TIME = 1000 * 60 * 60 * 12;
-    const tokenExpirationDate = user.token
-      ? new Date(user.token)
-      : new Date(new Date().getTime() + EXPIRATION_TIME);
-    user.tokenExpiration = tokenExpirationDate;
     setUser(user);
     setTokenExpirationDate(tokenExpirationDate);
     AsyncStorage.setItem(
       "userData",
       JSON.stringify({
         id: user._id,
-        token: user.token,
+        name: user.name,
+        phone: user.phone,
         image: user.image,
         role: user.role,
-        tokenExpiration: tokenExpirationDate.toISOString(),
+        accessToken: user.accessToken,
+        refreshToken: user.refreshToken,
       })
     );
   }, []);
@@ -53,7 +50,6 @@ export const AuthContextProvider = ({
 
   const updateToken = useCallback(async () => {
     //call refresh token
-    const EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
     const newTokens = await getAccessUsingRefresh();
     const currUser = {
       ...user,
@@ -64,7 +60,7 @@ export const AuthContextProvider = ({
   }, [login]);
 
   useEffect(() => {
-    if (user && user.token && tokenExpirationDate) {
+    if (user && user.accessToken) {
       let remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
       if (remainingTime < 0) {
         remainingTime = 0;

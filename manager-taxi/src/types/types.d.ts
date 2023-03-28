@@ -8,11 +8,12 @@ export type AuthCtx = {
   logout: () => void;
 };
 
-export type userWToken = IUser & {
-  token: string;
+export type Keys = {
+  accessToken: string;
   refreshToken: string;
-  tokenExpiration: Date;
 };
+
+export type userWToken = IUser & Keys;
 
 export type reducerInputState = {
   value: string;
