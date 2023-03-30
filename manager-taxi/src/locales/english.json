@@ -70,6 +70,17 @@
     "handling": "handling",
     "Stocks": "Stocks",
     "Assignments": "Assignments",
-    "Attendance": "Attendance"
+    "Attendance": "Attendance",
+    "NewStock": "New Stock",
+    "error-image": "Please provide an image",
+    "error-number": "Please enter a valid number",
+    "error-text-required": "Please provide a value",
+    "quantity": "Quantity",
+    "add": "Add",
+    "newCategory": "New category",
+    "choosePhoto": "Choose photo",
+    "NoPhoto": "No image taken yet",
+    "chooseCamera": "Take an image",
+    "chooseMedia": "Pick an image"
   }
 }

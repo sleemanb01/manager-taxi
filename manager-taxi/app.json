@@ -11,12 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sleemanb01.managertaxi"
+      "bundleIdentifier": "com.sleemanb01.managertaxi",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take photos."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,6 +33,14 @@
       "eas": {
         "projectId": "3611d368-20dc-4ab7-8e73-c6b62bc39773"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
   }
 }

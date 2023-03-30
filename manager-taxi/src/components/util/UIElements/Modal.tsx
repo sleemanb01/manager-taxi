@@ -28,7 +28,7 @@ export function SimpleModal({
   return (
     <Modal
       visible={show}
-      onRequestClose={() => onCancel}
+      onRequestClose={onCancel}
       animationType="slide"
       transparent={true}
     >
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
+    // shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

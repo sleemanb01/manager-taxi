@@ -1,9 +1,12 @@
 import React from "react";
+import { RootStackParamList } from "../../../types/types";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
-import { BottomNavigation } from "react-native-paper";
 
 const Auth = React.lazy(() => import("../../../pages/Auth"));
+const Main = React.lazy(() => import("../../../pages/Main"));
 const Stocks = React.lazy(() => import("../../../pages/Stocks"));
+const NewStock = React.lazy(() => import("../../../pages/CRUD/NewStock"));
 const Attendance = React.lazy(() => import("../../../pages/Attendance"));
 
 export function AuthStack() {
@@ -11,29 +14,31 @@ export function AuthStack() {
 }
 
 export function AuthenticatedStack() {
+  const Stack = createNativeStackNavigator<RootStackParamList>();
   const { t } = useTranslation();
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: "Attendance", title: t("Attendance"), focusedIcon: "history" },
-    {
-      key: "Stocks",
-      title: t("Stocks"),
-      focusedIcon: "application-cog",
-      unfocusedIcon: "application-edit",
-    },
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    Stocks,
-    Attendance,
-  });
-
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <Stack.Navigator initialRouteName="Main">
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Attendance"
+        component={Attendance}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Stocks"
+        component={Stocks}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NewStock"
+        component={NewStock}
+        options={{ headerTitle: t("NewStock"), headerBackTitleVisible: false }}
+      />
+    </Stack.Navigator>
   );
 }

@@ -4,7 +4,7 @@ import { IAssignements, ICategory, IShift, IStock, IUser } from "./interfaces";
 export type AuthCtx = {
   user: userWToken | undefined;
   updateUser: (user: userWToken) => void;
-  login: (user: userWToken) => void;
+  login: (user: userWToken, saveToStorage: boolean) => void;
   logout: () => void;
 };
 
@@ -54,4 +54,11 @@ export type StocksWActions = {
   shift: IShift | null;
   setValues: Dispatch<SetStateAction<IStock[]>>;
   clickHandler: (id: string) => void;
+};
+
+export type RootStackParamList = {
+  Main: undefined;
+  Attendance: undefined;
+  Stocks: undefined;
+  NewStock: undefined;
 };

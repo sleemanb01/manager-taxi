@@ -1,11 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { BACKEND_API_URL } from "../util/constants";
-import { ERROR_UNKNOWN } from "../util/txt";
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const activeHttpRequests = useRef<AbortController[]>([]);
+
+  const ERROR_UNKNOWN = "משהו השתבש";
 
   const sendRequest = useCallback(
     async (

@@ -70,6 +70,17 @@
     "handling": "בטיפול",
     "Stocks": "מלאי",
     "Assignments": "משימות",
-    "Attendance": "נוכחות"
+    "Attendance": "נוכחות",
+    "NewStock": "הוסף מלאי",
+    "error-image": "נא להזין תמונה",
+    "error-number": "נא למלא מספר חוקי",
+    "error-text-required": "נא מלא את השדה",
+    "quantity": "כמות",
+    "add": "הוסף",
+    "newCategory": "הוסף קטגוריה",
+    "choosePhoto": "בחר תמונה",
+    "noPhoto": "לא נבחרה תמונה עדיין",
+    "takeImage": "צלם תמונה",
+    "pickImage": "בחר תמונה"
   }
 }

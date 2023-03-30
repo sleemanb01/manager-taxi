@@ -9,11 +9,14 @@ import i18n from "../../../util/i18n";
 import { Loading } from "../Loading";
 
 function Navigation({ user }: { user: userWToken | undefined }) {
-  return (
-    <NavigationContainer independent={true}>
-      {user ? <AuthenticatedStack /> : <AuthStack />}
-    </NavigationContainer>
-  );
+  if (user) {
+    return (
+      <NavigationContainer independent={true}>
+        <AuthenticatedStack />
+      </NavigationContainer>
+    );
+  }
+  return <AuthStack />;
 }
 
 export function Root() {
@@ -22,17 +25,17 @@ export function Root() {
 
   React.useEffect(() => {
     (async () => {
-      const storedUsr = await AsyncStorage.getItem("user");
+      const storedUsr = await AsyncStorage.getItem("userData");
 
       if (storedUsr) {
-        login(JSON.parse(storedUsr));
+        login(JSON.parse(storedUsr), false);
       }
       setIsLoading(false);
     })();
   }, []);
 
   if (isLoading) {
-    <Loading />;
+    return <Loading />;
   }
   return <Navigation user={user} />;
 }

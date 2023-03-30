@@ -23,6 +23,8 @@ export default function Auth() {
   /* ************************************************************************************************** */
 
   const authSubmitHandler = async () => {
+    console.log("auth submit");
+
     let TEST = { phone: "0548879522" };
     try {
       let res = await sendRequest(
@@ -31,7 +33,7 @@ export default function Auth() {
         JSON.stringify(TEST),
         DEFAULT_HEADERS
       );
-      login(res!);
+      login(res!, true);
     } catch (err) {}
   };
 

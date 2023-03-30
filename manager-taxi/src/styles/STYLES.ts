@@ -307,12 +307,13 @@ export const dropDownStyles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     backgroundColor: COLORS.white,
-    borderRadius: 12,
-    borderWidth: 1,
     borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 5,
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
+    marginVertical: 20,
     zIndex: 1,
     elevation: 1,
   },
@@ -323,11 +324,10 @@ export const dropDownStyles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.white,
-    borderWidth: 1,
     borderColor: COLORS.black,
-    textAlignVertical: "center",
-    height: 35,
-    paddingHorizontal: 10,
+    borderWidth: 1,
+    padding: 10,
+    alignItems: "flex-start",
   },
 });
 

@@ -19,21 +19,15 @@ export const AuthContextProvider = ({
 }) => {
   const [user, setUser] = useState<userWToken | undefined>(undefined);
 
-  const login = useCallback(async (user: userWToken) => {
-    await AsyncStorage.setItem("userData", JSON.stringify(user));
-    setUser(user);
-    AsyncStorage.setItem(
-      "userData",
-      JSON.stringify({
-        _id: user._id,
-        image: user.image,
-        phone: user.phone,
-        role: user.role,
-        accessToken: user.accessToken,
-        refreshToken: user.refreshToken,
-      })
-    );
-  }, []);
+  const login = useCallback(
+    async (user: userWToken, saveToStorage: boolean) => {
+      if (saveToStorage) {
+        await AsyncStorage.setItem("userData", JSON.stringify(user));
+      }
+      setUser(user);
+    },
+    []
+  );
 
   const updateUser = useCallback((user: userWToken) => {
     setUser(user);
@@ -53,7 +47,7 @@ export const AuthContextProvider = ({
           accessToken: newTokens.accessToken,
           refreshToken: newTokens.refreshToken,
         };
-        login(currUser);
+        login(currUser, false);
       }
     } else {
       logout();
@@ -90,7 +84,7 @@ export const AuthContextProvider = ({
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
           };
-          login(user);
+          login(user, false);
         }
       }
     })();

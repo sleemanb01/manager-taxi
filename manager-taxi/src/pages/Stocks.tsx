@@ -4,10 +4,13 @@ import { View, StyleSheet } from "react-native";
 import { Appbar } from "react-native-paper";
 import { useStocks } from "../hooks/useStocks";
 import { getCurrDay } from "../util/time";
+import { FAB } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { IStock } from "../types/interfaces";
+import { RootStackParamList } from "../types/types";
 
 export default function Stocks() {
-  const { categories } = useStocks();
-
   // const nav = useNavigate();
   // const { shift, setShift } = useContext(ShiftContext);
 
@@ -54,7 +57,15 @@ export default function Stocks() {
   //   setOpenShiftPicker(false);
   // };
 
+  const { categories } = useStocks();
+
   const { t } = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const addHandler = () => {
+    navigation.navigate("NewStock");
+  };
 
   return (
     <View style={styles.container}>
@@ -63,6 +74,7 @@ export default function Stocks() {
         <Appbar.Content title={getCurrDay().slice(5, -6)} onPress={() => {}} />
         <Appbar.Action icon="magnify" onPress={() => {}} />
       </Appbar.Header>
+      <FAB icon="plus" style={styles.fab} onPress={addHandler} />
     </View>
   );
 }
@@ -70,5 +82,11 @@ export default function Stocks() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  fab: {
+    position: "absolute",
+    margin: 20,
+    right: 0,
+    bottom: 0,
   },
 });
