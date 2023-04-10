@@ -15,6 +15,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const path_1 = __importDefault(require("path"));
 const categories_1 = require("./routes/categories");
 const shift_1 = require("./routes/shift");
+const data_1 = require("./controllers/data");
 const PORT = 5000;
 const ENV = process.env;
 const URI = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASSWORD}@db.w3sncpr.mongodb.net/${ENV.DB_NAME}?retryWrites=true&w=majority`;
@@ -31,6 +32,7 @@ app.use("/api/stocks", stock_1.stockRoutes);
 app.use("/api/shifts", shift_1.shiftRoutes);
 app.use("/api/categories", categories_1.categoriesRoutes);
 app.use("/api/users", users_1.usersRoutes);
+app.get("/api/data", data_1.getData);
 app.use((_req, _res, _next) => {
     const error = new http_error_1.HttpError(messages_1.ERROR_UNDEFINED_ROUTE, enums_1.HTTP_RESPONSE_STATUS.Not_Found);
     throw error;

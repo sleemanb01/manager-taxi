@@ -1,5 +1,12 @@
 import { EReducerActionType, EValidatorType } from "./enums";
-import { IAssignements, ICategory, IShift, IStock, IUser } from "./interfaces";
+import {
+  IAssignements,
+  ICategory,
+  IRole,
+  IShift,
+  IStock,
+  IUser,
+} from "./interfaces";
 
 export type AuthCtx = {
   user: userWToken | undefined;
@@ -50,7 +57,6 @@ export type HandlerFuncType = () => void;
 export type StocksWActions = {
   values: IStock[];
   displayArray: string[];
-  categories: ICategory[];
   shift: IShift | null;
   setValues: Dispatch<SetStateAction<IStock[]>>;
   clickHandler: (id: string) => void;
@@ -60,5 +66,27 @@ export type RootStackParamList = {
   Main: undefined;
   Attendance: undefined;
   Stocks: undefined;
-  NewStock: undefined;
+  NewCategory: {
+    appData: useAppData;
+  };
+  NewStock: {
+    appData: useAppData;
+    selected?: string;
+  };
+};
+
+export type appData = {
+  roles: Array<IRole>;
+  categories: Array<ICategory>;
+};
+
+export type useAppData = appData & {
+  setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
+  updateDataInStorage: (x: ICategory[]) => void;
+  addCategory: (x: ICategory) => void;
+};
+
+export type navigationParams = {
+  to: keyof RootStackParamList;
+  props: any;
 };

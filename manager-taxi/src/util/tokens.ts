@@ -4,9 +4,9 @@ import { Keys } from "../types/types";
 import { ENDPOINT_REFRESH_TOKENS } from "./constants";
 
 export const getAccessUsingRefresh = async (
-  token: string
+  token: string,
+  sendRequest: Function
 ): Promise<Keys | null> => {
-  const { sendRequest } = useHttpClient();
   try {
     const res = await sendRequest(ENDPOINT_REFRESH_TOKENS, "GET", null, {
       Authorization: "Barer " + token,

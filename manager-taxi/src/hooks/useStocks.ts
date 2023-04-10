@@ -8,30 +8,21 @@ import { useHttpClient } from "./http-hook";
 export const useStocks = (): StocksWActions => {
   const [values, setValues] = React.useState<IStock[]>([]);
   const [displayArray, setDisplayArray] = React.useState<string[]>([]);
-  const [categories, setCategories] = React.useState<ICategory[]>([]);
   const [shift, setShift] = React.useState<IShift | null>(null);
 
   const { sendRequest } = useHttpClient();
 
   React.useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
         const res = await sendRequest(
           ENDPOINT_STOCKS + "/" + new Date(getCurrDay())
         );
-        const fetchedCategoris = res.categories;
-
-        localStorage.setItem("categories", JSON.stringify(fetchedCategoris));
-        setCategories(fetchedCategoris);
         setValues(res.stocks);
-        const fetchedShift = res.shift;
-        if (fetchedShift) {
-          setShift(fetchedShift);
-        }
+        setShift(res.shift);
       } catch (err) {}
-    };
-    fetchData();
-  }, [sendRequest, setValues, setShift, setCategories]);
+    })();
+  }, [sendRequest, setValues, setShift]);
 
   const clickHandler = React.useCallback(
     (id: string) => {
@@ -52,10 +43,11 @@ export const useStocks = (): StocksWActions => {
     [setDisplayArray, displayArray]
   );
 
+  // const deleteHandler = () => {};
+
   return {
     values,
     displayArray,
-    categories,
     shift,
     setValues,
     clickHandler,

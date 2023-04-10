@@ -7,6 +7,7 @@ const Auth = React.lazy(() => import("../../../pages/Auth"));
 const Main = React.lazy(() => import("../../../pages/Main"));
 const Stocks = React.lazy(() => import("../../../pages/Stocks"));
 const NewStock = React.lazy(() => import("../../../pages/CRUD/NewStock"));
+const NewCategory = React.lazy(() => import("../../../pages/CRUD/NewCategory"));
 const Attendance = React.lazy(() => import("../../../pages/Attendance"));
 
 export function AuthStack() {
@@ -38,6 +39,14 @@ export function AuthenticatedStack() {
         name="NewStock"
         component={NewStock}
         options={{ headerTitle: t("NewStock"), headerBackTitleVisible: false }}
+      />
+      <Stack.Screen
+        name="NewCategory"
+        component={NewCategory}
+        options={{
+          headerTitle: t("NewCategory"),
+          headerBackTitleVisible: false,
+        }}
       />
     </Stack.Navigator>
   );

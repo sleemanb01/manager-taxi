@@ -1,19 +1,21 @@
 export const getCurrDay = () => {
   const closingTime = 12;
 
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  let mm = today.getMonth() + 1; // Months start at 0!
-  let dd = today.getDate();
+  let targetDate = new Date();
 
-  let hour = today.getHours();
+  let hour = targetDate.getHours();
 
   // shift will close automaticaly after 1 AM
 
   if (hour < closingTime) {
-    dd--;
+    targetDate = new Date(targetDate.getTime());
+    targetDate.setDate(targetDate.getDate() - 1);
   }
 
-  const formattedToday = yyyy + "/" + mm + "/" + dd + " 02:00";
+  let yyyy = targetDate.getFullYear();
+  let mm = targetDate.getMonth() + 1; // Months start at 0!
+  let dd = targetDate.getDate();
+
+  const formattedToday = dd + "/" + mm + "/" + yyyy + " 02:00";
   return formattedToday;
 };

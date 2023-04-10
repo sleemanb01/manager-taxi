@@ -1,11 +1,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNavigation } from "react-native-paper";
+import { AuthContext } from "../hooks/auth-context";
 import Attendance from "./Attendance";
 import Stocks from "./Stocks";
-import { Text, View, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { AuthContext } from "../hooks/auth-context";
 
 export default function Main() {
   const { t } = useTranslation();
@@ -40,9 +38,3 @@ export default function Main() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

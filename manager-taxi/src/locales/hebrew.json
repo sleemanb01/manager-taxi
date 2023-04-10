@@ -77,10 +77,13 @@
     "error-text-required": "נא מלא את השדה",
     "quantity": "כמות",
     "add": "הוסף",
-    "newCategory": "הוסף קטגוריה",
+    "NewCategory": "הוסף קטגוריה",
     "choosePhoto": "בחר תמונה",
+    "chooseRole": "בחר תפקיד",
     "noPhoto": "לא נבחרה תמונה עדיין",
     "takeImage": "צלם תמונה",
-    "pickImage": "בחר תמונה"
+    "pickImage": "בחר תמונה",
+    "addNew": "הוסף",
+    "choose": "בחר"
   }
 }

@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { AuthCtx, userWToken } from "../types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAccessUsingRefresh, gettokenRemainingTime } from "../util/tokens";
+import { useHttpClient } from "./http-hook";
 
 export const AuthContext = createContext<AuthCtx>({
   user: undefined,
@@ -18,6 +19,7 @@ export const AuthContextProvider = ({
   children: JSX.Element;
 }) => {
   const [user, setUser] = useState<userWToken | undefined>(undefined);
+  const { sendRequest } = useHttpClient();
 
   const login = useCallback(
     async (user: userWToken, saveToStorage: boolean) => {
@@ -40,7 +42,10 @@ export const AuthContextProvider = ({
 
   const updateToken = useCallback(async () => {
     if (gettokenRemainingTime(user!.refreshToken) > 0) {
-      const newTokens = await getAccessUsingRefresh(user!.refreshToken);
+      const newTokens = await getAccessUsingRefresh(
+        user!.refreshToken,
+        sendRequest
+      );
       if (newTokens) {
         const currUser: userWToken = {
           ...user!,
@@ -65,30 +70,34 @@ export const AuthContextProvider = ({
     }
   }, [user, logout]);
 
-  useEffect(() => {
-    (async () => {
-      const storedData = await AsyncStorage.getItem("userData");
-      if (storedData) {
-        const data = JSON.parse(storedData);
-        if (
-          data &&
-          data.accessToken &&
-          new Date(data.accessToken) > new Date()
-        ) {
-          const user: userWToken = {
-            _id: data._id,
-            name: data.name,
-            phone: data.phone,
-            image: data.image,
-            role: data.role,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
-          };
-          login(user, false);
-        }
-      }
-    })();
-  }, [login]);
+  // useEffect(() => {
+  //   const autoLogIn = async () => {
+  //     const storedData = await AsyncStorage.getItem("userData");
+  //     if (storedData) {
+  //       const data = JSON.parse(storedData);
+  //       if (
+  //         data &&
+  //         data.accessToken &&
+  //         gettokenRemainingTime(data.accessToken) > new Date().getTime()
+  //       ) {
+  //         const user: userWToken = {
+  //           _id: data._id,
+  //           name: data.name,
+  //           phone: data.phone,
+  //           image: data.image,
+  //           role: data.role,
+  //           accessToken: data.accessToken,
+  //           refreshToken: data.refreshToken,
+  //         };
+  //         login(user, false);
+  //       }
+  //     }
+  //   }
+  //   if(!user)
+  //   {
+  //     autoLogIn();
+  //   }
+  // }, [login]);
 
   const value: AuthCtx = {
     user,

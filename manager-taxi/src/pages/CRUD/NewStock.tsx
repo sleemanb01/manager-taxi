@@ -1,6 +1,5 @@
 import React from "react";
-import { ICategory, IStock } from "../../types/interfaces";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { useHttpClient } from "../../hooks/http-hook";
 import { Loading } from "../../components/util/Loading";
 import { ErrorModal } from "../../components/util/ErrorModal";
@@ -9,15 +8,21 @@ import { useTranslation } from "react-i18next";
 import { reducerInputStateInitVal } from "../../hooks/useReducer";
 import { useForm } from "../../hooks/form-hook";
 import { EValidatorType } from "../../types/enums";
-import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import ImagePickerEx from "../../components/util/UIElements/ImagePicker";
 import { Dropdown } from "../../components/util/UIElements/DropDown";
 import KeyBoardAvoid from "../../components/util/KeyBoardAvoid";
-import { Button } from "react-native-paper";
 import MyButton from "../../components/Buttons/MyButton";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { navigationParams, RootStackParamList } from "../../types/types";
 
-export default function NewStock() {
+type Props = NativeStackScreenProps<RootStackParamList, "NewStock">;
+
+export default function NewStock({ route, navigation }: Props) {
+  const appData = route.params?.appData;
+  console.log("New Stock ...", appData.categories.length);
+
   const { t } = useTranslation();
+
   const [formState, inputHandler] = useForm(
     {
       name: reducerInputStateInitVal,
@@ -30,11 +35,23 @@ export default function NewStock() {
 
   const [selected, setSelected] = React.useState<string | undefined>(undefined);
 
-  const submit = () => {};
+  const submit = () => {
+    navigation.pop();
+  };
 
-  const newCategory = t("newCategory");
-  const category: ICategory = { _id: "1", name: "hi", roleId: "1" };
-  const categoriesNames = [category];
+  const navigateTo: navigationParams = {
+    to: "NewCategory",
+    props: { appData },
+  };
+
+  const selectedParam = route.params.selected;
+  React.useEffect(() => {
+    if (selectedParam) {
+      console.log("NewStock params", selectedParam);
+
+      setSelected(selectedParam);
+    }
+  }, [selectedParam]);
 
   return (
     <KeyBoardAvoid>
@@ -45,7 +62,8 @@ export default function NewStock() {
           title={t("chooseCategory")}
           setSelected={setSelected}
           selected={selected}
-          arr={[]}
+          arr={appData.categories}
+          navigateTo={navigateTo}
         />
         <Input
           id="name"

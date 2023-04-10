@@ -24,4 +24,4 @@ export const ENDPOINT_STOCKS_PARTIAL = "stocks/partial";
 export const ENDPOINT_STOCKS_WIMAGE = "stocks/WImage";
 export const ENDPOINT_CATEGORIES = "categories";
 export const ENDPOINT_SHIFTS = "shifts";
-export const ENDPOINT_ROLES = "roles";
+export const ENDPOINT_DATA = "data";

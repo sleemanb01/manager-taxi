@@ -79,8 +79,11 @@
     "add": "Add",
     "newCategory": "New category",
     "choosePhoto": "Choose photo",
+    "chooseRole": "Choose role",
     "NoPhoto": "No image taken yet",
     "chooseCamera": "Take an image",
-    "chooseMedia": "Pick an image"
+    "chooseMedia": "Pick an image",
+    "addNew": "Add",
+    "choose": "choose"
   }
 }

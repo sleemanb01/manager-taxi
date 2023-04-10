@@ -10,4 +10,5 @@ const users_1 = require("../controllers/users");
 /* ************************************************************** */
 exports.usersRoutes = express_1.default.Router();
 exports.usersRoutes.get("/", users_1.getUsers);
+exports.usersRoutes.get("/refreshTokens", users_1.refreshTokens);
 exports.usersRoutes.post("/login", [(0, express_validator_1.check)("phone").not().isEmpty()], users_1.login);
