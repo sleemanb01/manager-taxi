@@ -15,12 +15,17 @@ import MyButton from "../../components/Buttons/MyButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { navigationParams, RootStackParamList } from "../../types/types";
 import HttpComponent from "../../components/HttpComponent";
+import eventEmitter from "../../util/eventEmitter";
+import { DEFAULT_HEADERS, ENDPOINT_STOCKS } from "../../util/constants";
+import { AuthContext } from "../../hooks/auth-context";
+import { IStock } from "../../types/interfaces";
 
 type Props = NativeStackScreenProps<RootStackParamList, "NewStock">;
 
 export default function NewStock({ route, navigation }: Props) {
-  const { roles, categories } = route.params;
+  const { roles, categories, selected } = route.params;
   const { t } = useTranslation();
+  const { user } = React.useContext(AuthContext);
 
   const [formState, inputHandler] = useForm(
     {
@@ -30,11 +35,34 @@ export default function NewStock({ route, navigation }: Props) {
     false
   );
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [selectedId, setSelectedId] = React.useState<string | undefined>(
+    undefined
+  );
 
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
+  React.useEffect(() => {
+    if (selected) {
+      setSelectedId(selected);
+    }
+  }, [selected]);
 
-  const submit = () => {
-    navigation.pop();
+  const submitHandler = async () => {
+    const DEFAULT_MIN_QUANTITY = 1;
+    const newStock: IStock = {
+      categoryId: selectedId,
+      name: formState.inputs.name!.value,
+      quantity: parseInt(formState.inputs.quantity!.value),
+      minQuantity: DEFAULT_MIN_QUANTITY,
+    };
+    try {
+      const res = await sendRequest(
+        ENDPOINT_STOCKS,
+        "POST",
+        JSON.stringify(newStock),
+        { Authorization: "Barer " + user?.accessToken, ...DEFAULT_HEADERS }
+      );
+      eventEmitter.notify("onStockAdd", res.stock);
+      navigation.goBack();
+    } catch (err) {}
   };
 
   const navigateTo: navigationParams = {
@@ -42,20 +70,13 @@ export default function NewStock({ route, navigation }: Props) {
     props: { roles },
   };
 
-  const selectedParam = route.params.selected;
-  React.useEffect(() => {
-    if (selectedParam) {
-      setSelected(selectedParam);
-    }
-  }, [selectedParam]);
-
   return (
     <KeyBoardAvoid>
       <HttpComponent httpStatus={{ isLoading, error, clearError }}>
         <Dropdown
           title={t("chooseCategory")}
-          setSelected={setSelected}
-          selected={selected}
+          setSelected={setSelectedId}
+          selected={selectedId}
           arr={categories}
           navigateTo={navigateTo}
         />
@@ -79,9 +100,9 @@ export default function NewStock({ route, navigation }: Props) {
         />
         <ImagePickerEx />
         <MyButton
-          pressHandler={submit}
+          pressHandler={submitHandler}
           text={t("add")}
-          disabled={!!!selected || !formState.isValid}
+          disabled={!!!selectedId || !formState.isValid}
         />
       </HttpComponent>
     </KeyBoardAvoid>

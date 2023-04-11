@@ -9,7 +9,7 @@ const stockSchema = new Schema({
     name: { type: String, required: true },
     categoryId: { type: Schema.Types.ObjectId, required: true, ref: "Category" },
     quantity: { type: Number, required: true },
-    image: { type: String, required: true },
+    image: { type: String, required: false },
     minQuantity: { type: Number, required: true },
 });
 exports.default = mongoose_1.default.model("Stock", stockSchema);

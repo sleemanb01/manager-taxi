@@ -16,6 +16,6 @@ export const getCurrDay = () => {
   let mm = targetDate.getMonth() + 1; // Months start at 0!
   let dd = targetDate.getDate();
 
-  const formattedToday = dd + "/" + mm + "/" + yyyy + " 02:00";
+  const formattedToday = yyyy + "-" + mm + "-" + dd + " 02:00";
   return formattedToday;
 };

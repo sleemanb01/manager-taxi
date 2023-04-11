@@ -56,10 +56,11 @@ export type HandlerFuncType = () => void;
 
 export type StocksWActions = {
   values: IStock[];
-  displayArray: string[];
   shift: IShift | null;
-  setValues: Dispatch<SetStateAction<IStock[]>>;
+  displayArray: string[];
   clickHandler: (id: string) => void;
+  addValue: (newStock: IStock) => void;
+  addShift: (newShift: IShift) => void;
 };
 
 export type RootStackParamList = {

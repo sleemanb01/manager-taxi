@@ -11,7 +11,6 @@ import {
   View,
 } from "react-native";
 import { dropDownStyles, imageStyles } from "../../../styles/STYLES";
-import { ICategory } from "../../../types/interfaces";
 import { navigationParams, RootStackParamList } from "../../../types/types";
 
 export function Dropdown({
@@ -32,6 +31,12 @@ export function Dropdown({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  React.useEffect(() => {
+    if (selected) {
+      closeHndler();
+    }
+  }, [selected]);
+
   const toggleDropdown = () => {
     setVisible(!visible);
   };
@@ -42,14 +47,13 @@ export function Dropdown({
 
   const pressHandler = (item: any) => {
     setSelected(item._id);
-    closeHndler();
   };
 
   const newItem = () => {
     navigation.navigate(navigateTo!.to, navigateTo!.props);
   };
 
-  function Item(item: any) {
+  function renderItem(item: any) {
     return (
       <Pressable onPress={() => pressHandler(item)}>
         <View style={dropDownStyles.button}>
@@ -59,12 +63,20 @@ export function Dropdown({
     );
   }
 
+  let label = title;
+  if (selected) {
+    const targert = arr.find((e) => e._id === selected);
+    if (targert) {
+      label = targert.name;
+    }
+  }
+
   function renderDropdown() {
     return (
       <View style={dropDownStyles.dropdownContainer}>
         <FlatList
           data={arr}
-          renderItem={({ item }) => Item(item)}
+          renderItem={({ item }) => renderItem(item)}
           keyExtractor={({ _id }) => _id}
         />
         {navigateTo && (
@@ -76,20 +88,6 @@ export function Dropdown({
         )}
       </View>
     );
-  }
-
-  React.useEffect(() => {
-    if (selected) {
-      setVisible(false);
-    }
-  }, [selected]);
-
-  let label = title;
-  if (selected) {
-    const targert = arr.find((e) => e._id === selected);
-    if (targert) {
-      label = targert.name;
-    }
   }
 
   return (

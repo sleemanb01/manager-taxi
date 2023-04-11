@@ -28,12 +28,14 @@ export default function NewCategory({ route }: Props) {
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
+  const [selectedId, setSelectedId] = React.useState<string | undefined>(
+    undefined
+  );
   const { user } = React.useContext(AuthContext);
 
   const submitHandler = async () => {
     const newCategory = {
-      roleId: selected,
+      roleId: selectedId,
       name: formState.inputs.name!.value,
     };
     try {
@@ -51,8 +53,8 @@ export default function NewCategory({ route }: Props) {
     <HttpComponent httpStatus={{ isLoading, error, clearError }}>
       <Dropdown
         title={t("chooseRole")}
-        setSelected={setSelected}
-        selected={selected}
+        setSelected={setSelectedId}
+        selected={selectedId}
         arr={roles}
       />
       <Input
@@ -67,7 +69,7 @@ export default function NewCategory({ route }: Props) {
       <MyButton
         pressHandler={submitHandler}
         text={t("add")}
-        disabled={!!!selected || !formState.isValid}
+        disabled={!!!selectedId || !formState.isValid}
       />
     </HttpComponent>
   );

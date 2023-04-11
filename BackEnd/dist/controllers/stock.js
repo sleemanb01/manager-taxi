@@ -18,7 +18,6 @@ const http_error_1 = require("../models/http-error");
 const stock_model_1 = __importDefault(require("../models/stock.model"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const shift_model_1 = __importDefault(require("../models/shift.model"));
-const category_model_1 = __importDefault(require("../models/category.model"));
 const enums_1 = require("../types/enums");
 const messages_1 = require("../util/messages");
 const s3_1 = require("../middleware/s3");
@@ -45,14 +44,12 @@ exports.getStock = getStock;
 /* ************************************************************** */
 const getStocks = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let stocks = [];
-    let categories;
     let shift;
     const date = req.params.date;
     try {
         const sess = yield mongoose_1.default.startSession();
         sess.startTransaction();
         stocks = yield stock_model_1.default.find();
-        categories = yield category_model_1.default.find();
         shift = yield shift_model_1.default.findOne({ date: date });
         sess.commitTransaction();
     }
@@ -60,11 +57,12 @@ const getStocks = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         return next(internalError);
     }
     for (let i = 0; i < stocks.length; i++) {
-        stocks[i].image = yield (0, s3_1.getFileS3)(stocks[i].image);
+        if (stocks[i].image) {
+            stocks[i].image = yield (0, s3_1.getFileS3)(stocks[i].image);
+        }
     }
     res.status(enums_1.HTTP_RESPONSE_STATUS.OK).json({
         stocks: stocks,
-        categories: categories,
         shift: shift,
     });
 });
@@ -88,15 +86,20 @@ const addStock = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         const error = new http_error_1.HttpError(messages_1.ERROR_UNAUTHORIZED, enums_1.HTTP_RESPONSE_STATUS.Unauthorized);
         return next(error);
     }
-    const upload = yield (0, s3_1.uploadToS3)(req.file);
-    if (!upload.success) {
-        return next(internalError);
+    const image = req.file;
+    let upload = undefined;
+    if (image) {
+        upload = yield (0, s3_1.uploadToS3)(req.file);
+        if (!upload.success) {
+            upload = undefined;
+            return next(internalError);
+        }
     }
     const newStock = new stock_model_1.default({
         name,
         quantity,
         categoryId,
-        image: upload.data || req.body.image,
+        image: upload === null || upload === void 0 ? void 0 : upload.data,
         minQuantity,
     });
     try {
