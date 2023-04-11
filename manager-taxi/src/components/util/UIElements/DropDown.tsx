@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
+  FlatList,
   Image,
   Pressable,
   Text,
@@ -39,31 +40,33 @@ export function Dropdown({
     setVisible(false);
   };
 
-  const pressHandler = (i: number) => {
-    setSelected(arr[i]);
+  const pressHandler = (item: any) => {
+    setSelected(item._id);
     closeHndler();
   };
 
   const newItem = () => {
-    // console.log("go to new Item");
-    // navigateToNew();
-    // navigation.navigate("NewCategory", { addCategory });
-
     navigation.navigate(navigateTo!.to, navigateTo!.props);
   };
+
+  function Item(item: any) {
+    return (
+      <Pressable onPress={() => pressHandler(item)}>
+        <View style={dropDownStyles.button}>
+          <Text>{item.name}</Text>
+        </View>
+      </Pressable>
+    );
+  }
 
   function renderDropdown() {
     return (
       <View style={dropDownStyles.dropdownContainer}>
-        {arr &&
-          arr.length > 0 &&
-          arr.map((curr, i) => (
-            <Pressable key={i.toString()} onPress={() => pressHandler(i)}>
-              <View style={dropDownStyles.button}>
-                <Text>{curr.name}</Text>
-              </View>
-            </Pressable>
-          ))}
+        <FlatList
+          data={arr}
+          renderItem={({ item }) => Item(item)}
+          keyExtractor={({ _id }) => _id}
+        />
         {navigateTo && (
           <Pressable key={"default"} onPress={newItem}>
             <View style={dropDownStyles.button}>
@@ -75,10 +78,24 @@ export function Dropdown({
     );
   }
 
+  React.useEffect(() => {
+    if (selected) {
+      setVisible(false);
+    }
+  }, [selected]);
+
+  let label = title;
+  if (selected) {
+    const targert = arr.find((e) => e._id === selected);
+    if (targert) {
+      label = targert.name;
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={toggleDropdown}>
       <View style={dropDownStyles.headerContainer}>
-        <Text>{selected ? selected.name : title}</Text>
+        <Text>{label}</Text>
         <Image
           style={imageStyles.tinytinyLogo}
           source={require("../../../../assets/dropDownIcon.png")}

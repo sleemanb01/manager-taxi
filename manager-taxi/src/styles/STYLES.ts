@@ -305,6 +305,8 @@ export const commonStyles = StyleSheet.create({
 
 export const dropDownStyles = StyleSheet.create({
   headerContainer: {
+    flex: 1,
+    maxHeight: 50,
     flexDirection: "row",
     backgroundColor: COLORS.white,
     borderColor: COLORS.black,
@@ -318,11 +320,13 @@ export const dropDownStyles = StyleSheet.create({
     elevation: 1,
   },
   dropdownContainer: {
+    flex: 1,
     top: 50,
     width: "100%",
     position: "absolute",
   },
   button: {
+    flex: 1,
     backgroundColor: COLORS.white,
     borderColor: COLORS.black,
     borderWidth: 1,

@@ -1,5 +1,4 @@
 import React from "react";
-import { ICategory } from "../../types/interfaces";
 import { useHttpClient } from "../../hooks/http-hook";
 import { Input } from "../../components/util/UIElements/Input";
 import { useTranslation } from "react-i18next";
@@ -13,12 +12,12 @@ import { RootStackParamList } from "../../types/types";
 import HttpComponent from "../../components/HttpComponent";
 import { AuthContext } from "../../hooks/auth-context";
 import { ENDPOINT_CATEGORIES, DEFAULT_HEADERS } from "../../util/constants";
-import { CommonActions } from "@react-navigation/native";
+import eventEmitter from "../../util/eventEmitter";
 
 type Props = NativeStackScreenProps<RootStackParamList, "NewCategory">;
 
-export default function NewCategory({ route, navigation }: Props) {
-  const appData = route.params?.appData;
+export default function NewCategory({ route }: Props) {
+  const roles = route.params.roles;
 
   const { t } = useTranslation();
 
@@ -29,11 +28,14 @@ export default function NewCategory({ route, navigation }: Props) {
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
-
   const [selected, setSelected] = React.useState<string | undefined>(undefined);
   const { user } = React.useContext(AuthContext);
 
-  const addCategory = async (newCategory: ICategory) => {
+  const submitHandler = async () => {
+    const newCategory = {
+      roleId: selected,
+      name: formState.inputs.name!.value,
+    };
     try {
       const res = await sendRequest(
         ENDPOINT_CATEGORIES,
@@ -41,30 +43,8 @@ export default function NewCategory({ route, navigation }: Props) {
         JSON.stringify(newCategory),
         { Authorization: "Barer " + user?.accessToken, ...DEFAULT_HEADERS }
       );
-      const updatedCategories = [...appData.categories, res.category];
-      // appData.updateDataInStorage(updatedCategories);
-      // appData.setCategories((prev) => [...prev, newCategory]);
-      appData.addCategory(res.category);
-      // navigation.navigate("NewStock", { appData, selected: res.category._id });
-      // navigation.dispatch({
-      //   ...CommonActions.setParams({ selected: res.category._id }),
-      //   source: "NewStock",
-      // });
+      eventEmitter.notify("onCategoryAdd", res.category);
     } catch (err) {}
-  };
-
-  console.log("NewCategory......", appData.categories.length);
-
-  React.useEffect(() => {
-    console.log("NewCategory", appData);
-  }, [appData]);
-
-  const submitHandler = () => {
-    const newCategory = {
-      roleId: selected,
-      name: formState.inputs.name!.value,
-    };
-    addCategory(newCategory);
   };
 
   return (
@@ -73,7 +53,7 @@ export default function NewCategory({ route, navigation }: Props) {
         title={t("chooseRole")}
         setSelected={setSelected}
         selected={selected}
-        arr={appData.roles}
+        arr={roles}
       />
       <Input
         id="name"

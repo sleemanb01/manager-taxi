@@ -8,17 +8,39 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/types";
 import { useAppData } from "../hooks/appData-hook";
+import { ICategory } from "../types/interfaces";
+import eventEmitter from "../util/eventEmitter";
+import { useHttpClient } from "../hooks/http-hook";
 
 export default function Stocks() {
-  const appData = useAppData();
-  console.log("Stocks", appData.categories.length);
-
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { categories, roles, addCategory } = useAppData(sendRequest);
   const { t } = useTranslation();
   const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    useNavigation<NativeStackNavigationProp<RootStackParamList, "Stocks">>();
+
+  React.useEffect(() => {
+    eventEmitter.addListener("onCategoryAdd", categoryAddHandler);
+    return () => {
+      eventEmitter.removeListener("onCategoryAdd", categoryAddHandler);
+    };
+  }, []);
+
+  const categoryAddHandler = async (newCategory: ICategory) => {
+    const updatedCategories = [...categories, newCategory];
+    await addCategory(updatedCategories);
+    navigation.navigate("NewStock", {
+      categories: updatedCategories,
+      roles,
+      selected: updatedCategories[updatedCategories.length - 1]._id,
+    });
+  };
 
   const addHandler = () => {
-    navigation.navigate("NewStock", { appData });
+    navigation.navigate("NewStock", {
+      categories,
+      roles,
+    });
   };
 
   return (

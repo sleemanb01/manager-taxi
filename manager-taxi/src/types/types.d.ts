@@ -67,10 +67,11 @@ export type RootStackParamList = {
   Attendance: undefined;
   Stocks: undefined;
   NewCategory: {
-    appData: useAppData;
+    roles: Array<IRole>;
   };
   NewStock: {
-    appData: useAppData;
+    roles: Array<IRole>;
+    categories: Array<ICategory>;
     selected?: string;
   };
 };
@@ -78,13 +79,14 @@ export type RootStackParamList = {
 export type appData = {
   roles: Array<IRole>;
   categories: Array<ICategory>;
+  addCategory: (updatedCategories: ICategory[]) => void;
 };
 
-export type useAppData = appData & {
-  setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
-  updateDataInStorage: (x: ICategory[]) => void;
-  addCategory: (x: ICategory) => void;
-};
+// export type useAppData = appData & {
+//   // setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
+//   // updateDataInStorage: (x: ICategory[]) => void;
+//   addCategory: (x: ICategory) => void;
+// };
 
 export type navigationParams = {
   to: keyof RootStackParamList;

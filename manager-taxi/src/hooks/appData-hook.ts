@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useHttpClient } from "./http-hook";
-import { appData } from "../types/types";
 import {
   DEFAULT_HEADERS,
   ENDPOINT_CATEGORIES,
@@ -10,41 +9,44 @@ import React from "react";
 import { ICategory, IRole } from "../types/interfaces";
 import { AuthContext } from "./auth-context";
 
-export const useAppData = () => {
+export const useAppData = (
+  sendRequest: (
+    url: string,
+    method?: string,
+    body?: BodyInit | null,
+    headers?: any
+  ) => any
+) => {
   const [categories, setCategories] = React.useState<ICategory[]>([]);
   const [roles, setRoles] = React.useState<IRole[]>([]);
 
-  const { sendRequest } = useHttpClient();
-
-  const getData = React.useCallback(async () => {
-    let ret = null;
-    const storedData = await AsyncStorage.getItem("appData");
-    // await AsyncStorage.removeItem("appData");
-    // console.log("app Data...", storedData);
-    if (!storedData) {
-      try {
-        const res = await sendRequest(ENDPOINT_DATA);
-        await AsyncStorage.setItem("appData", JSON.stringify(res));
-        ret = res;
-      } catch {
-        console.log("error");
+  React.useEffect(() => {
+    const getData = async () => {
+      const storedData = await AsyncStorage.getItem("appData");
+      if (!storedData) {
+        try {
+          const res = await sendRequest(ENDPOINT_DATA);
+          await AsyncStorage.setItem("appData", JSON.stringify(res));
+          setCategories(res.categories);
+          setRoles(res.roles);
+        } catch {
+          console.log("error");
+        }
+      } else {
+        const data = JSON.parse(storedData);
+        setCategories(data.categories);
+        setRoles(data.roles);
       }
-    } else {
-      const data = JSON.parse(storedData);
-      ret = data;
-    }
-    return ret;
-  }, [sendRequest]);
+    };
+    getData();
+  }, []);
 
-  const addCategory = (NewCategory: ICategory) => {
-    setCategories((prev) => [...prev, NewCategory]);
-  };
-
-  const updateDataInStorage = async (updatedCategories: ICategory[]) => {
+  const addCategory = async (updatedCategories: ICategory[]) => {
     await AsyncStorage.setItem(
       "appData",
       JSON.stringify({ categories: updatedCategories, roles })
     );
+    setCategories(updatedCategories);
   };
 
   const removeCategory = async (deletedId: string) => {
@@ -63,17 +65,5 @@ export const useAppData = () => {
     }
   };
 
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const data = await getData();
-        // console.log("useAppData", data);
-
-        setCategories(data.categories);
-        setRoles(data.roles);
-      } catch {}
-    })();
-  }, [getData]);
-
-  return { categories, roles, setCategories, updateDataInStorage, addCategory };
+  return { categories, roles, addCategory };
 };

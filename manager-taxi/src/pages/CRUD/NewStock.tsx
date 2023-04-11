@@ -14,20 +14,18 @@ import KeyBoardAvoid from "../../components/util/KeyBoardAvoid";
 import MyButton from "../../components/Buttons/MyButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { navigationParams, RootStackParamList } from "../../types/types";
+import HttpComponent from "../../components/HttpComponent";
 
 type Props = NativeStackScreenProps<RootStackParamList, "NewStock">;
 
 export default function NewStock({ route, navigation }: Props) {
-  const appData = route.params?.appData;
-  console.log("New Stock ...", appData.categories.length);
-
+  const { roles, categories } = route.params;
   const { t } = useTranslation();
 
   const [formState, inputHandler] = useForm(
     {
       name: reducerInputStateInitVal,
       quantity: reducerInputStateInitVal,
-      image: reducerInputStateInitVal,
     },
     false
   );
@@ -41,28 +39,24 @@ export default function NewStock({ route, navigation }: Props) {
 
   const navigateTo: navigationParams = {
     to: "NewCategory",
-    props: { appData },
+    props: { roles },
   };
 
   const selectedParam = route.params.selected;
   React.useEffect(() => {
     if (selectedParam) {
-      console.log("NewStock params", selectedParam);
-
       setSelected(selectedParam);
     }
   }, [selectedParam]);
 
   return (
     <KeyBoardAvoid>
-      <View style={{ flex: 1, marginHorizontal: 20 }}>
-        <ErrorModal error={error} onClear={clearError} />
-        {isLoading && <Loading />}
+      <HttpComponent httpStatus={{ isLoading, error, clearError }}>
         <Dropdown
           title={t("chooseCategory")}
           setSelected={setSelected}
           selected={selected}
-          arr={appData.categories}
+          arr={categories}
           navigateTo={navigateTo}
         />
         <Input
@@ -89,7 +83,7 @@ export default function NewStock({ route, navigation }: Props) {
           text={t("add")}
           disabled={!!!selected || !formState.isValid}
         />
-      </View>
+      </HttpComponent>
     </KeyBoardAvoid>
   );
 }
