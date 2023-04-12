@@ -9,7 +9,7 @@ import { Dropdown } from "../../components/util/UIElements/DropDown";
 import MyButton from "../../components/Buttons/MyButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/types";
-import HttpComponent from "../../components/HttpComponent";
+import HttpComponent from "../../components/generics/HttpComponent";
 import { AuthContext } from "../../hooks/auth-context";
 import { ENDPOINT_CATEGORIES, DEFAULT_HEADERS } from "../../util/constants";
 import eventEmitter from "../../util/eventEmitter";

@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
 
 const Auth = React.lazy(() => import("../../../pages/Auth"));
-const Main = React.lazy(() => import("../../../pages/Main"));
+const BottomNav = React.lazy(() => import("../../BottomNav"));
 const Stocks = React.lazy(() => import("../../../pages/Stocks"));
 const NewStock = React.lazy(() => import("../../../pages/CRUD/NewStock"));
 const NewCategory = React.lazy(() => import("../../../pages/CRUD/NewCategory"));
@@ -19,10 +19,10 @@ export function AuthenticatedStack() {
   const { t } = useTranslation();
 
   return (
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName="BottomNav">
       <Stack.Screen
-        name="Main"
-        component={Main}
+        name="BottomNav"
+        component={BottomNav}
         options={{ headerShown: false }}
       />
       <Stack.Screen

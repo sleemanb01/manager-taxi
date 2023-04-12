@@ -14,7 +14,7 @@ import KeyBoardAvoid from "../../components/util/KeyBoardAvoid";
 import MyButton from "../../components/Buttons/MyButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { navigationParams, RootStackParamList } from "../../types/types";
-import HttpComponent from "../../components/HttpComponent";
+import HttpComponent from "../../components/generics/HttpComponent";
 import eventEmitter from "../../util/eventEmitter";
 import { DEFAULT_HEADERS, ENDPOINT_STOCKS } from "../../util/constants";
 import { AuthContext } from "../../hooks/auth-context";

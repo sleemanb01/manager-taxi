@@ -1,8 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { View, StyleSheet } from "react-native";
-import { Appbar } from "react-native-paper";
-import { getCurrDay } from "../util/time";
+
 import { FAB } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -12,7 +11,9 @@ import { ICategory, IStock } from "../types/interfaces";
 import eventEmitter from "../util/eventEmitter";
 import { useHttpClient } from "../hooks/http-hook";
 import { useStocks } from "../hooks/stocks-hook";
-import HttpComponent from "../components/HttpComponent";
+import HttpComponent from "../components/generics/HttpComponent";
+import AppBar from "../components/AppBar";
+import Main from "../components/Main";
 
 export default function Stocks() {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -50,14 +51,9 @@ export default function Stocks() {
 
   return (
     <View style={Stockstyles.container}>
-      <Appbar.Header elevated={true} mode={"small"}>
-        <Appbar.Content title={t("Stocks")} />
-        <Appbar.Content title={getCurrDay().slice(0, -11)} onPress={() => {}} />
-        <Appbar.Action icon="magnify" onPress={() => {}} />
-      </Appbar.Header>
+      <AppBar title={t("Stocks")} />
       <HttpComponent httpStatus={{ isLoading, error, clearError }}>
-        <View></View>
-        <View></View>
+        <Main data={{ categories, roles, values }} />
       </HttpComponent>
       <FAB icon="plus" style={Stockstyles.fab} onPress={addHandler} />
     </View>

@@ -2,10 +2,10 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { BottomNavigation } from "react-native-paper";
 import { AuthContext } from "../hooks/auth-context";
-import Attendance from "./Attendance";
-import Stocks from "./Stocks";
+import Attendance from "../pages/Attendance";
+import Stocks from "../pages/Stocks";
 
-export default function Main() {
+export default function BottomNav() {
   const { t } = useTranslation();
 
   const [index, setIndex] = React.useState(0);

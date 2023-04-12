@@ -8,7 +8,7 @@ export interface IUser {
   name?: string;
   phone: string;
   image?: string;
-  role: IRole["_id"];
+  roleId: IRole["_id"];
 }
 
 export interface IStock {

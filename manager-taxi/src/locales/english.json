@@ -84,6 +84,9 @@
     "chooseCamera": "Take an image",
     "chooseMedia": "Pick an image",
     "addNew": "Add",
-    "choose": "choose"
+    "choose": "choose",
+    "role": "role",
+    "category": "category",
+    "items": "items"
   }
 }

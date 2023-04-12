@@ -33,6 +33,7 @@ export default function Auth() {
         JSON.stringify(TEST),
         DEFAULT_HEADERS
       );
+
       login(res!, true);
     } catch (err) {}
   };

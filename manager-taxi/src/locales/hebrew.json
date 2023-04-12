@@ -84,6 +84,9 @@
     "takeImage": "צלם תמונה",
     "pickImage": "בחר תמונה",
     "addNew": "הוסף",
-    "choose": "בחר"
+    "choose": "בחר",
+    "role": "תפקיד",
+    "category": "קטגוריה",
+    "items": "פריטים"
   }
 }

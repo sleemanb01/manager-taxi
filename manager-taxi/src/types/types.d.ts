@@ -64,7 +64,7 @@ export type StocksWActions = {
 };
 
 export type RootStackParamList = {
-  Main: undefined;
+  BottomNav: undefined;
   Attendance: undefined;
   Stocks: undefined;
   NewCategory: {
@@ -83,13 +83,19 @@ export type appData = {
   addCategory: (updatedCategories: ICategory[]) => void;
 };
 
-// export type useAppData = appData & {
-//   // setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
-//   // updateDataInStorage: (x: ICategory[]) => void;
-//   addCategory: (x: ICategory) => void;
-// };
-
 export type navigationParams = {
   to: keyof RootStackParamList;
   props: any;
+};
+
+export type httpStatus = {
+  isLoading: boolean;
+  error: string | null;
+  clearError: HandlerFuncType;
+};
+
+export type stocksData = {
+  categories: Array<ICategory>;
+  roles: Array<IRole>;
+  values: Array<IStock>;
 };

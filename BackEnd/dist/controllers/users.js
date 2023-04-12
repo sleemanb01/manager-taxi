@@ -70,7 +70,7 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         name: targetUser.name,
         phone: targetUser.phone,
         image: targetUser.image,
-        role: targetUser.role,
+        roleId: targetUser.roleId,
         accessToken,
         refreshToken,
     };
